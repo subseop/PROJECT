@@ -1,0 +1,337 @@
+# 프론트 구축하기
+
+## 세부설명
+
+### 1. HTML 뼈대 구조
+```
+<!doctype html>
+<html lang="ko">
+<head> ... </head>
+<body> ... </body>
+</html>
+```
+
+
+### 2. <head> 안 - 스타일(css) + 차트 라이브러리
+    2.1 기본 메타 & 제목
+    ```
+    <!doctype html>
+    <html lang="ko">
+    <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>소상공인 판매관리</title>
+    ```
+    - charset="utf-8": UTF-8 방식으로 저장되어 있음, 한글이 깨지지 않게하기 위함
+    - viewport: 모바일에서 확대/축소 잘 되게
+    - <title>: 브라우저 탭에 뜨는 이름
+
+    2-2. css 변수 & 기본 스타일
+    ```
+    :root {
+    --bg: #ffffff;
+    --text: #111827;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --accent: #2563eb;
+    }
+
+    ```
+    - 색깔들을 변수로 저장
+    - :root : 문서의 최상위 요소를 선택하는 의사 클래스
+
+    ```
+    * { box-sizing: border-box; }
+
+    body {
+    margin: 0;
+    background: #f3f4f6;
+    color: var(--text);
+    font: 14px/1.6 system-ui, -apple-system, sans-serif;
+    }
+    ```
+    - box-sizing: border-box : pddding, border 포함해서 크기 계산(레이아웃 다루기 편함)
+    - body: 기본 배경, 글씨, 폰트 설정
+    - var(--변수명): css변수 값을 불러오는 함수
+    - system-ui: 운영체제(OS)의 기본 UI 글꼴을 사용하라는 의미
+    - -apple-system: Apple 기기용 시스템 폰트(Safari 호환성 때문에 항상 넣음)
+    - sans-serif: 앞에 있는 글꼴들이 없을 때 사용하는 여분(백업) 글꼴
+
+    2-3. 상단 헤더 영역
+    ```
+    .top {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    }
+    ```
+    - 스크롤해도 위에 붙어있는 상단바
+
+    ```
+    .top-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 좌: 로고, 우: 액션 버튼들 */
+    padding: 10px 20px;
+    }
+    ```
+    - 가운데 정렬
+    - 왼쪽엔 로고/브랜드, 오른쪽엔 필터/버튼
+
+    ```
+    /* 로고 + 서비스 이름 영역 */
+    .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 15px;
+    }
+
+    /* 로고 박스 (이모지 포함 동그란 박스) */
+    .logo {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;  /* 가로/세로 가운데 정렬 */
+    background: var(--accent);
+    color: #fff;
+    font-size: 18px;
+    }
+
+    /* 상단 우측 액션 영역 (매장 선택, 새로고침 버튼 등) */
+    .actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    }
+
+    .actions label {
+    font-size: 12px;
+    color: var(--muted);
+    }
+
+    /* 공통 인풋 스타일 (select, input 등) */
+    .input {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #f9fafb;
+    font-size: 13px;
+    min-height: 32px;
+    }
+
+    /* 공통 버튼 스타일 */
+    .btn {
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: #ffffff;
+    padding: 6px 12px;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    }
+
+    /* 파란색(강조) 버튼 */
+    .btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+    }
+
+    /* 연한 회색 배경 버튼 (보조 버튼 느낌) */
+    .btn.ghost {
+    background: #f9fafb;
+    }
+
+    /* 비활성화된 버튼 상태 */
+    .btn:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+    }
+    ```
+    - brand: "소상공인 판매관리" 글자랑 아이콘 묶음
+    - logo: 파란 네모 안에 🛒이모지
+    - actions: 매장 선택 드롭다운, 새로고침 버튼
+    - input: 공통 인풋 스타일
+    - btn: 공통 버튼 스타일
+    - btn.primary: 파란색 버튼
+    - btn.ghost: 회색 느낌 버튼
+
+    2-4. 메인 컨테이너 / 카드
+    ```
+    .container {
+    max-width: 1200px;
+    margin: 18px auto 32px;
+    padding: 0 20px;
+    }
+
+    h2 { margin: 0 0 12px; font-size: 20px; }
+
+    .subtext {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    }
+
+    /* ================================
+    카드 공통 스타일
+    ================================== */
+    .card {
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+    padding: 18px 20px 20px;
+    }
+
+    .card h3 { margin: 0 0 12px; font-size: 16px; }
+
+    /* ================================
+    대시보드 전체 섹션 박스
+    ================================== */
+    .dash-section {
+    margin-top: 28px;
+    padding: 24px 28px 30px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+    }
+    ```
+
+    2.5 
+    ```
+    .dash-title {
+    margin: 0 0 4px;
+    font-size: 18px;
+    font-weight: 700;
+    }
+
+    .dash-sub {
+    margin: 0 0 18px;
+    font-size: 12px;
+    color: var(--muted);
+    }
+
+    /* ================================
+    대시보드 상단 요약 카드 (총 매출액, 수량 등)
+    ================================== */
+    .dash-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+    }
+
+    .dash-card {
+    flex: 1 1 180px;
+    min-width: 180px;
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 12px 14px;
+    border: 1px solid #e5e7eb;
+    }
+
+    .dash-value {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    }
+
+    /* ================================
+    대시보드 차트 영역 (월별 매출 / 품목별 수량)
+    ================================== */
+    .dash-charts {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.2fr); /* 왼쪽이 좀 더 넓게 */
+    gap: 18px;
+    }
+
+    .dash-chart-card {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 14px 16px 18px;
+    border: 1px solid #e5e7eb;
+    }
+
+    /* 캔버스는 width 100%로, 높이는 최대 280px */
+    canvas { width: 100%; max-height: 280px; }
+
+    /* ================================
+    반응형 스타일 (화면이 좁아졌을 때)
+    ================================== */
+    @media(max-width: 960px) {
+    /* 차트를 세로로 쌓기 */
+    .dash-charts { grid-template-columns: minmax(0, 1fr); }
+    /* CRUD 그리드도 한 열로 쌓기 */
+    .crud-grid { grid-template-columns: 1fr; }
+    }
+    ```
+    - dash-summary: “총 매출”, “총 수량”, “평균 단가”, “행 개수” 네 개 카드 가로로 나열
+    - dash-charts: 왼쪽은 라인차트, 오른쪽은 도넛차트 → 2열 그리드
+    - @media(max-width: 960px): 화면이 좁아지면(모바일/태블릿) 1열로 쌓이게 -> 반응형
+
+    2.6 CRUD 레이아웃 & CRUD UI 구성 요소
+```
+.crud-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 2.2fr 1fr; /* 왼쪽 크게, 오른쪽 작게 */
+}
+
+/* 테이블 상단 툴바 (조회, 초기화, 필터) */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.table-wrap { margin-top: 8px; }
+
+/* 기본 테이블 스타일 */
+table {
+  width: 100%;
+  border-collapse: collapse; /* 테두리 겹침 제거 */
+  font-size: 13px;
+}
+
+th, td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #e5e7eb; /* 행 구분선 */
+  text-align: left;
+  vertical-align: middle;
+}
+
+thead th {
+  background: #f9fafb;
+  font-weight: 600;
+}
+
+/* 입력폼 그룹 (라벨 + 인풋) */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  gap: 4px;
+}
+
+/* 입력폼 하단 버튼 영역 (저장/취소) */
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.form-actions .btn {
+  flex: 1;  /* 버튼 2개를 1:1 비율로 채우기 */
+}
+```
