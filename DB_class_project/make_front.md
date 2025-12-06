@@ -1,6 +1,6 @@
 # 프론트 구축하기
 
-## 세부설명
+## 세부설명- HTML head부분 
 
 ### 1. HTML 뼈대 구조
 ```
@@ -280,58 +280,136 @@
     - @media(max-width: 960px): 화면이 좁아지면(모바일/태블릿) 1열로 쌓이게 -> 반응형
 
     2.6 CRUD 레이아웃 & CRUD UI 구성 요소
-```
-.crud-grid {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: 2.2fr 1fr; /* 왼쪽 크게, 오른쪽 작게 */
-}
+    ```
+    .crud-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 2.2fr 1fr; /* 왼쪽 크게, 오른쪽 작게 */
+    }
 
-/* 테이블 상단 툴바 (조회, 초기화, 필터) */
-.toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 12px;
-}
+    /* 테이블 상단 툴바 (조회, 초기화, 필터) */
+    .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+    }
 
-.table-wrap { margin-top: 8px; }
+    .table-wrap { margin-top: 8px; }
 
-/* 기본 테이블 스타일 */
-table {
-  width: 100%;
-  border-collapse: collapse; /* 테두리 겹침 제거 */
-  font-size: 13px;
-}
+    /* 기본 테이블 스타일 */
+    table {
+    width: 100%;
+    border-collapse: collapse; /* 테두리 겹침 제거 */
+    font-size: 13px;
+    }
 
-th, td {
-  padding: 8px 10px;
-  border-bottom: 1px solid #e5e7eb; /* 행 구분선 */
-  text-align: left;
-  vertical-align: middle;
-}
+    th, td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #e5e7eb; /* 행 구분선 */
+    text-align: left;
+    vertical-align: middle;
+    }
 
-thead th {
-  background: #f9fafb;
-  font-weight: 600;
-}
+    thead th {
+    background: #f9fafb;
+    font-weight: 600;
+    }
 
-/* 입력폼 그룹 (라벨 + 인풋) */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 10px;
-  gap: 4px;
-}
+    /* 입력폼 그룹 (라벨 + 인풋) */
+    .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    gap: 4px;
+    }
 
-/* 입력폼 하단 버튼 영역 (저장/취소) */
-.form-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 4px;
-}
+    /* 입력폼 하단 버튼 영역 (저장/취소) */
+    .form-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+    }
 
-.form-actions .btn {
-  flex: 1;  /* 버튼 2개를 1:1 비율로 채우기 */
-}
-```
+    .form-actions .btn {
+    flex: 1;  /* 버튼 2개를 1:1 비율로 채우기 */
+    }
+    ```
+
+    2.7 신규 기능 카드 스타일(독점상품 / 발주 가이드)
+    ```
+    .new-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); /* 카드 자동 배치 */
+    gap: 12px;
+    }
+
+    /* 독점상품 / 발주가이드 카드 기본 스타일 */
+    .new-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    }
+
+    /* 카드 상단에 붙는 작은 뱃지 (카테고리, 상태 등) */
+    .nc-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    width: fit-content;
+    }
+
+    /* 카드 타이틀(상품명 등) */
+    .nc-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text);
+    }
+
+    /* 카드 설명 텍스트 */
+    .nc-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+    }
+
+    /* 카드 안의 주요 수치(예상 매출 등) */
+    .nc-val {
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 8px;
+    color: #111827;
+    }
+
+    /* 파란 계열 뱃지 */
+    .theme-blue {
+    background: #eff6ff;
+    color: var(--accent);
+    }
+
+    /* 보라 계열 뱃지 */
+    .theme-purple {
+    background: #f3e8ff;
+    color: #7c3aed;
+    }
+    </style>
+    ```
+    - new-grid → 카드 여러 개 반응형 그리드
+    - new-card → 각 상품/발주 추천 카드
+    - nc-badge → 상단의 작은 뱃지 (🔥 발주 증량 등)
+    - theme-blue/purple → 뱃지 색 테마
+
+    2.8 차트 라이브러리
+    ```
+    <!-- 차트 라이브러리: Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    ```
+    - Chart.js CDN 불러오기 (그래프 그릴 때 사용)
